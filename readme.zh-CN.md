@@ -1,13 +1,13 @@
 # DDReminder
-A simple tool that can monitoring Blibili UPs live-stream room status in real time and remind user when they start doing live-stream or close live-stream
+一个简单的工具，在指定的Bilibili UP主开始直播或下播时发出提醒
 [English](readme.md)
 
-## Usage
+## 使用方法
 ```sh
 ./generator.exe UID OutputPath
-#example
+#示例
 #./generator.exe 5780836 hacara.exe
 ```
 
-## License
+## 使用许可
 [GPL3.0](LICENSE)
