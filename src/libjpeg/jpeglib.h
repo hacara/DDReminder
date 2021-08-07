@@ -1,3 +1,4 @@
+#pragma comment(lib,"libjpeg.lib")
 /*
  * jpeglib.h
  *
