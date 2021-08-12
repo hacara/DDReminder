@@ -6,14 +6,21 @@ static const char MID[] = {0x6D,0x00,0x69,0x00,0x64,0x00,0x3D};
 int wmain(int argc,wchar_t** argv){
     wchar_t new_mid[17] = {0};
     wchar_t path[MAX_PATH];
-
+    wchar_t output_path[MAX_PATH];
     if(argc != 3 || lstrlenW(argv[1]) > 16){
-        fprintf(stderr,"Wrong command line arguments");
-        printf("usage: generator.exe <MID number> <Output file name>");
-        return -1;
+        printf("UID:\n");
+        size_t uid;
+        if (!wscanf(L"%u", &uid)) {
+            fprintf(stderr,"Please type a vaild number\n");
+        }
+        swprintf_s(new_mid,sizeof(new_mid), L"%u", uid);
+        swprintf_s(output_path, sizeof(output_path), L"%u.exe", uid);
+    }
+    else {
+        lstrcpyW(new_mid, argv[1]);
+        lstrcpyW(output_path, argv[2]);
     }
     lstrcpyW(path,argv[0]);
-    lstrcpyW(new_mid,argv[1]);
     {
         int path_len = lstrlenW(path);
         int index = path_len;
@@ -26,7 +33,7 @@ int wmain(int argc,wchar_t** argv){
 
     HANDLE hFile = CreateFileW(path,GENERIC_ALL,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
     if(hFile == INVALID_HANDLE_VALUE){
-        fprintf(stderr,"Template open failed\nerror code : %d",GetLastError());
+        fprintf(stderr,"Template open failed\nerror code : %d\n",GetLastError());
         return -1;
     }
     
@@ -38,7 +45,7 @@ int wmain(int argc,wchar_t** argv){
         if(memcmp(buf+index,MID,sizeof(MID)) == 0) break;
     }
     if(!index){
-        fprintf(stderr,"Template was broken");
+        fprintf(stderr,"Template was broken\n");
         return -1;
     }
     
@@ -46,9 +53,9 @@ int wmain(int argc,wchar_t** argv){
 
     CloseHandle(hFile);
 
-    HANDLE hNewFile = CreateFileW(argv[2],GENERIC_ALL,FILE_SHARE_WRITE,NULL,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,NULL);
+    HANDLE hNewFile = CreateFileW(output_path,GENERIC_ALL,FILE_SHARE_WRITE,NULL,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,NULL);
     if(hNewFile == INVALID_HANDLE_VALUE){
-        fprintf(stderr,"Create new file failed\nError Code: %d",GetLastError());
+        fprintf(stderr,"Create new file failed\nError Code: %d\n",GetLastError());
         return -1;
     }
     WriteFile(hNewFile,buf,size,&index,NULL);
