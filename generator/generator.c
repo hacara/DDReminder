@@ -12,6 +12,7 @@ int wmain(int argc,wchar_t** argv){
         size_t uid;
         if (!wscanf(L"%u", &uid)) {
             fprintf(stderr,"Please type a vaild number\n");
+            return -1;
         }
         swprintf_s(new_mid,sizeof(new_mid), L"%u", uid);
         swprintf_s(output_path, sizeof(output_path), L"%u.exe", uid);
